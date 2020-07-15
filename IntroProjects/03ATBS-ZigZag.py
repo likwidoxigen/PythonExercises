@@ -1,3 +1,18 @@
+#Automate the boring stuff Zig Zag Stars
+# Let’s use the programming concepts you’ve learned so far to create a small anima
+# tion program. This program will create a back-and-forth, zigzag pattern until th
+# e user stops it by pressing the Mu editor’s Stop button or by pressing CTRL-C. W
+# hen you run this program, the output will look something like this:
+#     ********
+#    ********
+#   ********
+#  ********
+# ********
+#  ********
+#   ********
+#    ********
+#     ********
+
 import time, sys
 spaces = 0
 NUMSTARS = 8

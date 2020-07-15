@@ -1,3 +1,5 @@
+#Convert a number to it's representation in words.
+#A small custom implementation for numbers < 99 and another using inflect
 import inflect
 
 
