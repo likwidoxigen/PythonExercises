@@ -1,0 +1,3 @@
+In python you can make a car.
+In python you can find a house.
+In python you can't use a semicolon to end a line
