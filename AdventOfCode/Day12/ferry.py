@@ -20,37 +20,47 @@ with open(finput, 'r') as file:
         if len(line) > 0:
             directions.append(parseDirections(line))
 
+def rotateLeft(loc,repeat):
+    newWY = loc['WX']
+    newWX = -1*loc['WY'] 
+    loc['WX'] = newWX
+    loc['WY'] = newWY
+    repeat -=1
+    if repeat == 0:
+        return loc
+    else:
+        return rotateLeft(loc,repeat)
+
+def rotateRight(loc,repeat):
+    newWY = -1*loc['WX']
+    newWX = loc['WY'] 
+    loc['WX'] = newWX
+    loc['WY'] = newWY
+    repeat -=1
+    if repeat == 0:
+        return loc
+    else:
+        return rotateRight(loc,repeat)
+
 def updateWayPointRotation(loc,command):
-    cardinals = []
-    pointing = loc['forward']
     dirr = command['command']
     rotation = command['distance']
+    numRotates = int(rotation/90)
+    loc['WX'] = loc['WX'] + (-1*loc['X'])
+    loc['WY'] = loc['WY'] + (-1*loc['Y'])
+    print("_--MEMEMEMEM---------------")
+    print(loc)
     if dirr == 'L':
-        cardinals = cardinalsL
+        loc = rotateLeft(loc,numRotates)
     else:
-        cardinals = cardinalsR
-    start = cardinals.index(pointing)
-    addOn = start + int(rotation/90)
-    if addOn >= 4:
-        addOn = addOn - 4
-    #print(f"Command:{dirr}|Amount{rotation}|Started:{pointing}|Now:{cardinals[addOn]}")
-    loc['forward'] = cardinals[addOn]
-    if loc['forward'] == 'N':
-        # ! -1 1
-        loc['WX'] = loc['WX'] if loc['WX'] < 0 else loc['WX'] * -1
-        loc['WY'] = abs(loc['WY'])
-    elif loc['forward']== 'E':
-        loc['WX'] = abs(loc['WX'])
-        loc['WY'] = abs(loc['WY'])
-        # ! 1 1
-    elif loc['forward'] == 'W':
-        # ! -1 1
-        loc['WX'] = loc['WX'] if loc['WX'] < 0 else loc['WX'] * -1
-        loc['WY'] = loc['WY'] if loc['WY'] < 0 else loc['WY'] * -1
-    else:
-        # ! -1 -1
-        loc['WX'] = abs(loc['WX'])
-        loc['WY'] = loc['WY'] if loc['WY'] < 0 else loc['WY'] * -1
+        loc = rotateRight(loc,numRotates)
+    print("_---secsecec-------")
+    print(loc)
+
+    loc['WX'] = loc['WX'] + (loc['X'])
+    loc['WY'] = loc['WY'] + (loc['Y'])
+    print("_---finfinfind-------")
+    print(loc)
     return loc
 
 def updateRotation(loc,command):
@@ -96,8 +106,14 @@ def getNewLoc2(loc,direction):
     if direction['command'] == 'W':
         loc['WX'] -= direction['distance']
     if direction['command'] == 'F':
-        loc['Y'] += (loc['WY'] * direction['distance'])
-        loc['X'] += (loc['WX'] * direction['distance'])
+        ychange = loc['WY'] + -1*loc['Y']
+        xchange = loc['WX'] + -1*loc['X']
+        print(f"ychange:{ychange}|xchange:{xchange}")
+        loc['Y'] += (ychange) * direction['distance']
+        loc['X'] += (xchange)  * direction['distance']
+        loc['WY'] = (loc['Y'] + ychange)
+        loc['WX'] = (loc['X'] + xchange)
+
     if direction['command'] == 'L' or direction['command'] == 'R':
         return updateWayPointRotation(loc,direction)
     return loc
@@ -114,8 +130,12 @@ print(f"Manhattan Distance:{abs(location['X']) + abs(location['Y'])}")
 
 location = {'X':0, 'Y':0, 'WX':10, 'WY':1, 'forward':'E'}
 
+print(location)
 for direction in directions2:
     location = getNewLoc2(location,direction)
+    print(location)
 
+
+print("---------------------------")
 print(location)
 print(f"Manhattan Distance:{abs(location['X']) + abs(location['Y'])}")
