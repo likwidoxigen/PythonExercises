@@ -36,8 +36,6 @@ def get_rates(sums, inputLength):
     print("epsilon:", int(''.join(map(str,epsilon)),2))
     return {"gamma":gamma, "epsilon":epsilon}
 
-
-
 def partA():
     global dlength, data
     index = 0
@@ -50,6 +48,12 @@ def partA():
     print("sums: ",sums)
     ge = get_rates(sums, inputLength)
 
+def getSubList(list,index,value):
+    subList = [];
+    for val in list:
+        if int(val[index]) == int(value):
+            subList.append(val)
+    return subList
 
 def oxygenGenerator():
     data2 = data.copy()
@@ -60,12 +64,7 @@ def oxygenGenerator():
         else:
             most_common = 0
         # print("most_common:",most_common, "index: ",index)
-        data3=[]
-        for val in data2:
-            if int(val[index]) == int(most_common):
-                # print('val:',val, "vindex:", val[index])
-                data3.append(val)
-        data2 =data3
+        data2 = getSubList(data2,index,most_common)
         index+=1
     print("oxygen Generator: ", int(''.join(map(str,data2[0])),2))
 
@@ -78,20 +77,13 @@ def coScrubber():
         else:
             most_common = 0
         # print("most_common:",most_common, "index: ",index)
-        data3=[]
-        for val in data2:
-            if int(val[index]) == int(most_common):
-                # print('val:',val, "vindex:", val[index])
-                data3.append(val)
-        data2 =data3
+        data2 = getSubList(data2,index,most_common)
         index+=1
     print("Co2 Scrubber: ", int(''.join(map(str,data2[0])),2))
 
 def partB():
     oxygenGenerator()
     coScrubber()
-
-   
 
 def main():
     inputfile = "./input01a.txt"
